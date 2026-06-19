@@ -29,6 +29,7 @@ import java.util.Properties
       "mensaje desde scala 3"
     )
 
+
   producer.send(record)
 
   println("Mensaje enviado")

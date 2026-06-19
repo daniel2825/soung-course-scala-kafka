@@ -31,6 +31,7 @@ import scala.jdk.CollectionConverters.*
     "earliest"
   )
 
+
   val consumer =
     new KafkaConsumer[String, String](props)
 

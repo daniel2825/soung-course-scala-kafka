@@ -11,6 +11,7 @@ def main(): Unit = {
     // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
     println(s"i = $i")
   }
+  
   println("Scala Kafka microservice started")
 }
 
