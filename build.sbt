@@ -9,8 +9,8 @@ lazy val root = (project in file("."))
     name := "song-course-scala-kakfa",
     libraryDependencies ++= Seq(
 
-      "org.neo4j.driver" % "neo4j-java-driver" % "5.20.0",
-
+      "org.neo4j.driver" % "neo4j-java-driver" % "5.28.5",
+      
       // Cats Effect
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
 
