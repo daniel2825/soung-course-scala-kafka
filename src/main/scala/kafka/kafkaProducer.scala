@@ -1,4 +1,7 @@
+package kafka
+
 import org.apache.kafka.clients.producer.*
+
 import java.util.Properties
 
 @main def runProducer(): Unit =
