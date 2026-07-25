@@ -1,42 +1,69 @@
 package repositories
 
-import configDb.Neo4jConnection
-import model.Person
-import org.neo4j.driver.{SessionConfig, Values}
+import cats.effect.IO
+import domain.Person
+import org.neo4j.driver.*
 
-class PersonaRepository {
+class PersonaRepository(
+                         driver: Driver
+                       ) {
 
-  def guardarPersona(persona: Person): Unit = {
+  def guardarPersona(persona: Person): IO[Unit] = {
 
-    val session =
-      Neo4jConnection.driver.session(
-        SessionConfig.forDatabase("song-track-db")
-      )
+    IO {
 
-    try {
-
-      val query =
-        """
-          CREATE (p:Persona {
-              name:$name,
-              lastName:$lastName,
-              birthDay:$birthDay,
-              email:$email
-          })
-        """
-
-      session.run(
-        query,
-        Values.parameters(
-          "name", persona.name,
-          "lastName", persona.lastName,
-          "birthDay", persona.birthDay,
-          "email", persona.email
+      val session =
+        driver.session(
+          SessionConfig.forDatabase("song-track-db")
         )
-      )
 
-    } finally {
-      session.close()
+
+      try {
+
+        val query =
+          """
+          CREATE (p:Persona {
+            name:$name,
+            lastName:$lastName,
+            birthDay:$birthDay,
+            email:$email
+          })
+          """
+
+
+        session.executeWrite { tx =>
+
+          val result =
+            tx.run(
+              query,
+              Values.parameters(
+                "name", persona.name,
+                "lastName", persona.lastName,
+                "birthDay", persona.birthDay,
+                "email", persona.email
+              )
+            )
+
+
+          result.consume()
+
+          ()
+
+        }
+
+
+        println(
+          s"Persona creada en Neo4j: ${persona.name}"
+        )
+
+
+      } finally {
+
+        session.close()
+
+      }
+
     }
+
   }
 }

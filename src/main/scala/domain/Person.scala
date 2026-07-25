@@ -1,4 +1,6 @@
-package model
+package domain
+
+import java.time.Instant
 
 final case class Person(
                          name: String,

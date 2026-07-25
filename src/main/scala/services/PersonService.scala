@@ -1,14 +1,21 @@
 package services
 
-import model.Person
+import cats.effect.IO
+import domain.Person
 import repositories.PersonaRepository
 
-class PersonService (repository: PersonaRepository){
 
-  def savePerson(person: Person): Unit = {
+class PersonService(
+                     repository: PersonaRepository
+                   ) {
 
-    repository.guardarPersona(person)
+
+  def savePerson(person: Person): IO[Unit] = {
+
+    IO.println(
+      s"Guardando persona en service: ${person.name}"
+    ) *>
+      repository.guardarPersona(person)
 
   }
-
 }
