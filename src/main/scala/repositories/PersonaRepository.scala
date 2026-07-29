@@ -10,7 +10,7 @@ class PersonaRepository(
                          driver: Driver
                        ) {
 
-  def guardarPersona(persona: Person): IO[Unit] = {
+  def guardarPersona(person: Person): IO[Unit] = {
 
     IO {
 
@@ -28,10 +28,10 @@ class PersonaRepository(
             tx.run(
               PersonQueries.create,
               Values.parameters(
-                "name", persona.name,
-                "lastName", persona.lastName,
-                "birthDay", persona.birthDay,
-                "email", persona.email
+                "name", person.name,
+                "lastName", person.lastName,
+                "birthDay", person.birthDay,
+                "email", person.email
               )
             )
 
@@ -44,7 +44,7 @@ class PersonaRepository(
 
 
         println(
-          s"Persona creada en Neo4j: ${persona.name}"
+          s"Persona created in Neo4j: ${person.name}"
         )
 
 

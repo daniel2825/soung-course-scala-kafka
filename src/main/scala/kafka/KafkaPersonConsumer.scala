@@ -55,7 +55,7 @@ class KafkaPersonConsumer(
 
           case Left(error) =>
             IO.println(
-              s"Error convirtiendo JSON a Person: ${error.getMessage}"
+              s"Error convert JSON a Person object: ${error.getMessage}"
             )
         }
 

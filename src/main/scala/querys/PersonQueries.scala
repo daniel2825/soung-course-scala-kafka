@@ -4,7 +4,7 @@ object PersonQueries {
 
   val create =
     """
-    MERGE (p:Persona {email:$email})
+    MERGE (p:Person {email:$email})
     SET
       p.name=$name,
       p.lastName=$lastName,
