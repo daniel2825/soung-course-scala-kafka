@@ -6,6 +6,8 @@ import fs2.kafka.*
 import configDb.KafkaConfig
 import domain.Person
 import services.PersonService
+import io.circe.generic.auto.*
+import io.circe.parser.decode
 
 
 class KafkaPersonConsumer(
@@ -35,6 +37,7 @@ class KafkaPersonConsumer(
       .records
       .evalMap { record =>
 
+        val json = record.record.value
 
         println(
           s"""
@@ -45,17 +48,16 @@ class KafkaPersonConsumer(
              |""".stripMargin
         )
 
+        decode[Person](json) match {
 
-        val persona =
-          Person(
-            name = "Juan",
-            lastName = "Pérez",
-            email = "email@gmail.com",
-            birthDay = "11/11/1990"
-          )
+          case Right(persona) =>
+            personaService.savePerson(persona)
 
-
-        personaService.savePerson(persona)
+          case Left(error) =>
+            IO.println(
+              s"Error convirtiendo JSON a Person: ${error.getMessage}"
+            )
+        }
 
       }
 

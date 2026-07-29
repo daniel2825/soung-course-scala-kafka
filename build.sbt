@@ -9,6 +9,10 @@ lazy val root = (project in file("."))
     name := "song-course-scala-kakfa",
     libraryDependencies ++= Seq(
 
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.18.2",
+
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.18.2",
+
       "org.neo4j.driver" % "neo4j-java-driver" % "5.28.5",
       
       // Cats Effect
