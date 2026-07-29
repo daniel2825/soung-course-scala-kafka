@@ -1,8 +1,9 @@
 import cats.effect.{IO, IOApp}
 import configDb.{KafkaConfig, Neo4jConnection}
-import kafka.KafkaPersonConsumer
-import repositories.PersonaRepository
-import services.PersonService
+import kafka.{KafkaCourseConsumer, KafkaPersonConsumer}
+import repositories.{CourseRepository, PersonaRepository}
+import fs2.Stream
+import services.{CourseService, PersonService}
 
 //project with Cats Effect y fs2-kafka
 object Main extends IOApp.Simple {
@@ -13,35 +14,49 @@ object Main extends IOApp.Simple {
 
     Neo4jConnection.resource.use { driver =>
 
-
-      val kafkaConfig =
-        KafkaConfig(
-          bootstrapServers = "localhost:9092",
-          topic = "test-topic",
-          groupId = "scala-group"
-        )
-
       val repository =
         new PersonaRepository(driver)
 
+      val courseRepository =
+        new CourseRepository(driver)
 
-      val service =
+      val personService =
         new PersonService(repository)
 
+      val courseService =
+        new CourseService(courseRepository)
 
-      val consumer =
+      val personRegisterConsumer = {
         new KafkaPersonConsumer(
-          service,
-          kafkaConfig
+          personService,
+          KafkaConfig(
+            bootstrapServers = "localhost:9092",
+            topic = "test-topic",
+            groupId = "scala-group"
+          )
         )
+      }
 
+      val courseSubscribeConsumer = {
+        new KafkaCourseConsumer(courseService,
+          KafkaConfig(
+              bootstrapServers = "localhost:9092",
+              topic = "subscribe-course",
+              groupId = "scala-group"
+            )
+          )
+      }
 
-      IO.println(
-        "Scala Kafka Microservice started"
-      ) *>
-        consumer.stream.compile.drain
-
-
+      Stream
+        .emits(
+          List(
+            personRegisterConsumer.stream,
+            courseSubscribeConsumer.stream
+          )
+        )
+        .parJoinUnbounded
+        .compile
+        .drain
     }
 
   }
