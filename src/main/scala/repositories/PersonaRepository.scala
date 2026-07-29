@@ -3,6 +3,8 @@ package repositories
 import cats.effect.IO
 import domain.Person
 import org.neo4j.driver.*
+import querys.PersonQueries
+
 
 class PersonaRepository(
                          driver: Driver
@@ -20,22 +22,11 @@ class PersonaRepository(
 
       try {
 
-        val query =
-          """
-          CREATE (p:Persona {
-            name:$name,
-            lastName:$lastName,
-            birthDay:$birthDay,
-            email:$email
-          })
-          """
-
-
         session.executeWrite { tx =>
 
           val result =
             tx.run(
-              query,
+              PersonQueries.create,
               Values.parameters(
                 "name", persona.name,
                 "lastName", persona.lastName,
