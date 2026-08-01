@@ -1,5 +1,5 @@
 package domain
 
 case class CourseSubscriptionEvent(
-                           course: Course,
-                           person: Person)
+                           courses: Courses,
+                           personEvent: PersonEvent)

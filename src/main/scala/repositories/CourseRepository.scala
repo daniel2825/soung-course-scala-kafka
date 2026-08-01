@@ -1,7 +1,7 @@
 package repositories
 
 import cats.effect.IO
-import domain.{Course, CourseSubscriptionEvent, Person}
+import domain.{Courses, CourseSubscriptionEvent, Person}
 import org.neo4j.driver.{Driver, SessionConfig, Values}
 import querys.CourseQueries
 
@@ -27,15 +27,23 @@ class CourseRepository (
             tx.run(
               CourseQueries.subscribe,
               Values.parameters(
-                "idCourse", courseSubscriptionEvent.course.idCourse,
-                "title", courseSubscriptionEvent.course.title
+                "idCourse", courseSubscriptionEvent.courses.idCourse,
+                "title", courseSubscriptionEvent.courses.title
               )
             )
 
-
           result.consume()
 
-          // build relationship whith person
+          val resultRelationShift =
+            tx.run(
+              CourseQueries.relation_to_course,
+              Values.parameters(
+                "idCourse", courseSubscriptionEvent.courses.idCourse,
+                "email", courseSubscriptionEvent.personEvent.email
+              )
+            )
+
+          resultRelationShift.consume()
 
           ()
 
@@ -43,7 +51,7 @@ class CourseRepository (
 
 
         println(
-          s"Course created in Neo4j: ${courseSubscriptionEvent.course.title}"
+          s"Course created in Neo4j: ${courseSubscriptionEvent.courses.title}"
         )
 
 

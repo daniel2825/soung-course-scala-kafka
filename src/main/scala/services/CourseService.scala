@@ -1,7 +1,7 @@
 package services
 
 import cats.effect.IO
-import domain.{Course, CourseSubscriptionEvent}
+import domain.{Courses, CourseSubscriptionEvent}
 import repositories.CourseRepository
 
 class CourseService(
@@ -11,7 +11,7 @@ class CourseService(
   def subscribePersonToCourse(courseSubscriptionEvent: CourseSubscriptionEvent): IO[Unit] = {
 
     IO.println(
-      s"Course suscribe service: ${courseSubscriptionEvent.course.title}"
+      s"Course suscribe service: ${courseSubscriptionEvent.courses.title}"
     ) *>
       repository.subscribeCourse(courseSubscriptionEvent)
 

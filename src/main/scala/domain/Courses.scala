@@ -1,6 +1,6 @@
 package domain
 
-final case class Course (
+final case class Courses(
                         idCourse: String,
                         title: String,
                         )

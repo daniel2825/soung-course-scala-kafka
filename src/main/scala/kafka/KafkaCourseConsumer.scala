@@ -2,7 +2,7 @@ package kafka
 
 import cats.effect.IO
 import configDb.KafkaConfig
-import domain.{Course, CourseSubscriptionEvent, Person}
+import domain.{Courses, CourseSubscriptionEvent, Person}
 import fs2.Stream
 import fs2.kafka.{ConsumerSettings, KafkaConsumer}
 import services.CourseService
