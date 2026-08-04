@@ -2,9 +2,9 @@ package kafka
 
 import cats.effect.IO
 import configDb.KafkaConfig
-import domain.{Courses, CourseSubscriptionEvent, Person}
+import domain.{CourseSubscriptionEvent, Courses, Person}
 import fs2.Stream
-import fs2.kafka.{ConsumerSettings, KafkaConsumer}
+import fs2.kafka.{AutoOffsetReset, ConsumerSettings, KafkaConsumer}
 import services.CourseService
 import io.circe.generic.auto.*
 import io.circe.parser.decode
@@ -22,6 +22,9 @@ class KafkaCourseConsumer (
       )
       .withGroupId(
         kafkaConfig.groupId
+      )
+      .withAutoOffsetReset(
+        AutoOffsetReset.Earliest
       )
 
 

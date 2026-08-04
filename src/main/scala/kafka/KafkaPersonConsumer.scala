@@ -24,6 +24,9 @@ class KafkaPersonConsumer(
       .withGroupId(
         kafkaConfig.groupId
       )
+      .withAutoOffsetReset(
+        AutoOffsetReset.Earliest
+      )
 
 
   def stream: Stream[IO, Unit] = {

@@ -32,7 +32,7 @@ object Main extends IOApp.Simple {
           KafkaConfig(
             bootstrapServers = "localhost:9092",
             topic = "test-topic",
-            groupId = "scala-group"
+            groupId = "scala-group-register"
           )
         )
       }
@@ -42,7 +42,7 @@ object Main extends IOApp.Simple {
           KafkaConfig(
               bootstrapServers = "localhost:9092",
               topic = "subscribe-course",
-              groupId = "scala-group"
+              groupId = "scala-group-subscribe"
             )
           )
       }
